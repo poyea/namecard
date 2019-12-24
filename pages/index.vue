@@ -1,14 +1,14 @@
 <template>
   <div class="container">
-    <vue-namecard/>
+    <vue-namecard />
   </div>
 </template>
 
 <script>
-import vueNamecard from '~/components/NameCard.vue';
+import vueNamecard from "~/components/NameCard.vue"
 export default {
   components: {
-    vueNamecard,
+    vueNamecard
   }
 }
 </script>
@@ -24,10 +24,9 @@ export default {
   max-height: 100vh;
 }
 
-
 .title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   font-weight: 300;
   font-size: 100px;
   color: #35495e;
