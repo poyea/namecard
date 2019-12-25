@@ -22,5 +22,5 @@ $ npm run generate
 $ npm run lint
 $ npm run lintfix
 
-* Note that lint will run before commiting.
 ```
+* Note that lint will run before commiting.
