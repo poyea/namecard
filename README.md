@@ -1,4 +1,4 @@
-# namecard
+# namecard  [![Build Status](https://travis-ci.com/poyea/namecard.svg?branch=master)](https://travis-ci.com/poyea/namecard)
 
 > Simplistic Nuxt name card
 
