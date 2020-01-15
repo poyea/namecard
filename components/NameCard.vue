@@ -3,7 +3,10 @@
     <div class="animated flip namecard">
       <div class="card-container">
         <div class="card-info">
-            <img class="card-avatar" :src="'https://avatars2.githubusercontent.com/u/24757020?s=460&v=4'" />
+          <img
+            class="card-avatar"
+            :src="'https://avatars2.githubusercontent.com/u/24757020?s=460&v=4'"
+          />
           <div class="card-name">
             John Law
           </div>
@@ -37,6 +40,14 @@
                 :icon="['fab', 'github']"
               />
             </a>
+            <div class="card-blog">
+              <a href="https://poyea.me/b/">
+                <font-awesome-icon
+                  class="blog-icon connection-icon"
+                  :icon="['fas', 'blog']"
+                />
+              </a>
+            </div>
             <a href="https://gitlab.com/poyea/" target="_blank">
               <font-awesome-icon
                 class="connection-icon"
@@ -83,7 +94,7 @@
 <script>
 import Vue from "vue"
 import { library } from "@fortawesome/fontawesome-svg-core"
-import { faEnvelope } from "@fortawesome/free-solid-svg-icons"
+import { faEnvelope, faBlog } from "@fortawesome/free-solid-svg-icons"
 import {
   faLinkedin,
   faGithub,
@@ -92,11 +103,17 @@ import {
   faDev
 } from "@fortawesome/free-brands-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
-library.add(faLinkedin, faGithub, faKeybase, faGitlab, faEnvelope, faDev)
+library.add(
+  faLinkedin,
+  faGithub,
+  faKeybase,
+  faGitlab,
+  faEnvelope,
+  faBlog,
+  faDev
+)
 Vue.component("font-awesome-icon", FontAwesomeIcon)
-export default {
-  props: ['https://avatars2.githubusercontent.com/u/24757020?s=460&v=4']
-}
+export default {}
 </script>
 
 <style scoped>
@@ -182,6 +199,15 @@ export default {
 }
 
 .card-connection a:hover {
+  color: blue;
+}
+
+.card-blog a:link,
+.card-blog a:visited {
+  color: #ff0000;
+}
+
+.card-blog a:hover {
   color: blue;
 }
 
