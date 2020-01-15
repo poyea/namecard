@@ -1,6 +1,6 @@
 # namecard
 
-> Simplistic Nuxt name card
+This simplistic Nuxt namecard is shown on [the homepage of my personal website](https://poyea.me/).
 
 ## Build Setup
 
@@ -17,10 +17,12 @@ $ npm run start
 
 # generate static project
 $ npm run generate
+```
 
+Remember to lint:
+```
 # lint tool
 $ npm run lint
 $ npm run lintfix
 
 ```
-* Note that lint will run before commiting.
