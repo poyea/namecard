@@ -1,4 +1,4 @@
-# namecard
+# namecard [![Build Status](https://travis-ci.com/poyea/namecard.svg?branch=master)](https://travis-ci.com/poyea/namecard)
 
 This simplistic Nuxt namecard is shown on [the homepage of my personal website](https://poyea.me/).
 
