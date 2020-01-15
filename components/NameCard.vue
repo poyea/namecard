@@ -3,11 +3,7 @@
     <div class="animated flip namecard">
       <div class="card-container">
         <div class="card-info">
-          <img
-            class="card-avatar"
-            src="https://avatars2.githubusercontent.com/u/24757020?s=460"
-            .
-          />
+            <img class="card-avatar" :src="'https://avatars2.githubusercontent.com/u/24757020?s=460&v=4'" />
           <div class="card-name">
             John Law
           </div>
@@ -98,7 +94,9 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
 library.add(faLinkedin, faGithub, faKeybase, faGitlab, faEnvelope, faDev)
 Vue.component("font-awesome-icon", FontAwesomeIcon)
-export default {}
+export default {
+  props: ['https://avatars2.githubusercontent.com/u/24757020?s=460&v=4']
+}
 </script>
 
 <style scoped>
