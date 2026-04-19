@@ -1,15 +1,17 @@
 <template>
-  <div>
-    <div class="animated flip namecard">
+  <article itemscope itemtype="https://schema.org/Person">
+    <div class="animated flip namecard" role="main">
       <div class="card-container">
         <div class="card-info">
           <img
             class="card-avatar"
             :src="'https://avatars2.githubusercontent.com/u/24757020?s=460&v=4'"
+            alt="John Law"
+            itemprop="image"
             draggable="false"
           />
-          <div class="card-name">John Law</div>
-          <div class="card-tagline">Mathematics, Software, Languages.</div>
+          <h1 class="card-name" itemprop="name">John Law</h1>
+          <p class="card-tagline" itemprop="description">Mathematics, Software, Languages.</p>
           <div class="location-roller">
             <div class="location-track">
               <span class="card-location">
@@ -42,43 +44,43 @@
               </span>
             </div>
           </div>
-          <div class="card-connection">
-            <a class="connection-icon" href="mailto:johnlaw@poyea.me?subject=I want to send you coffee, John" target="_blank" title="Email">
+          <nav class="card-connection" aria-label="Social links">
+            <a class="connection-icon" href="mailto:johnlaw@poyea.me?subject=I want to send you coffee, John" target="_blank" rel="noopener" title="Email" itemprop="email">
               <font-awesome-icon :icon="['fas', 'envelope']" />
             </a>
-            <a class="connection-icon" href="https://www.linkedin.com/in/poyea/" target="_blank" title="LinkedIn">
+            <a class="connection-icon" href="https://www.linkedin.com/in/poyea/" target="_blank" rel="noopener" title="LinkedIn" itemprop="sameAs">
               <font-awesome-icon :icon="['fab', 'linkedin']" />
             </a>
-            <a class="connection-icon" href="https://github.com/poyea/" target="_blank" title="GitHub">
+            <a class="connection-icon" href="https://github.com/poyea/" target="_blank" rel="noopener" title="GitHub" itemprop="sameAs">
               <font-awesome-icon :icon="['fab', 'github']" />
             </a>
-            <a class="connection-icon connection-shine" href="https://poyea.me/b/" target="_blank" title="Blog">
+            <a class="connection-icon connection-shine" href="https://poyea.me/b/" target="_blank" rel="noopener" title="Blog" itemprop="url">
               <font-awesome-icon :icon="['fas', 'blog']" />
             </a>
-            <a class="connection-icon" href="https://gitlab.com/poyea/" target="_blank" title="GitLab">
+            <a class="connection-icon" href="https://gitlab.com/poyea/" target="_blank" rel="noopener" title="GitLab" itemprop="sameAs">
               <font-awesome-icon :icon="['fab', 'gitlab']" />
             </a>
-            <!-- <a class="connection-icon" href="https://dev.to/poyea/" target="_blank" title="DEV">
+            <!-- <a class="connection-icon" href="https://dev.to/poyea/" target="_blank" rel="noopener" title="DEV">
               <font-awesome-icon :icon="['fab', 'dev']" />
             </a> -->
-            <a class="connection-icon" href="https://math.stackexchange.com/users/498637/poyea" target="_blank" title="Math Stack Exchange">
-              <svg class="connection-svg" viewBox="0 0 18 18" fill="currentColor"><path d="M3 4c0-1.1.9-2 2-2h8a2 2 0 0 1 2 2z"/><path d="M15 11H3c0 1.1.9 2 2 2h5v3l3-3a2 2 0 0 0 2-2"/><path d="M3 5h12v2H3z"/><path d="M3 8h12v2H3z"/></svg>
+            <a class="connection-icon" href="https://math.stackexchange.com/users/498637/poyea" target="_blank" rel="noopener" title="Math Stack Exchange" itemprop="sameAs">
+              <svg class="connection-svg" viewBox="0 0 18 18" fill="currentColor" aria-hidden="true"><path d="M3 4c0-1.1.9-2 2-2h8a2 2 0 0 1 2 2z"/><path d="M15 11H3c0 1.1.9 2 2 2h5v3l3-3a2 2 0 0 0 2-2"/><path d="M3 5h12v2H3z"/><path d="M3 8h12v2H3z"/></svg>
             </a>
-            <a class="connection-icon" href="https://keybase.io/poyea/" target="_blank" title="Keybase">
+            <a class="connection-icon" href="https://keybase.io/poyea/" target="_blank" rel="noopener" title="Keybase" itemprop="sameAs">
               <font-awesome-icon :icon="['fab', 'keybase']" />
             </a>
-          </div>
+          </nav>
         </div>
-        <div class="card-bio">
+        <blockquote class="card-bio">
           <p class="quote-text">It is impossible to separate a cube into two cubes, or a fourth power
           into two fourth powers, or in general, any power higher than the
           second into two like powers. I have discovered a truly marvellous
           proof of this, which this margin is too narrow to contain.</p>
-          <p class="quote-author">Pierre de Fermat</p>
-        </div>
+          <footer class="quote-author">Pierre de Fermat</footer>
+        </blockquote>
       </div>
     </div>
-  </div>
+  </article>
 </template>
 <script>
 import Vue from "vue"
@@ -175,6 +177,7 @@ export default {}
   line-height: 1.1;
   color: oklch(15% 0.01 240);
   margin-top: 0;
+  margin-bottom: 0;
 }
 
 .card-tagline {
