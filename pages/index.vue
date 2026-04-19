@@ -22,5 +22,6 @@ export default {
   align-items: center;
   text-align: center;
   height: 100vh;
+  height: 100dvh;
 }
 </style>

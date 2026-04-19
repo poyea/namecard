@@ -116,6 +116,7 @@ export default {}
 
 .namecard {
   height: calc(100vh - 40px);
+  height: calc(100dvh - 40px);
   width: 90vw;
   border-radius: 30px;
   margin: 20px;
