@@ -1,28 +1,31 @@
-# namecard [![Build Status](https://travis-ci.com/poyea/namecard.svg?branch=master)](https://travis-ci.com/poyea/namecard)
+# namecard
 
 This simplistic Nuxt namecard is shown on [the homepage of my personal website](https://poyea.me/).
 
 ## Build Setup
 
-``` bash
+```bash
 # install dependencies
-$ npm run install
+$ npm install
 
 # serve with hot reload at localhost:3000
 $ npm run dev
 
-# build for production and launch server
+# generate static site for production (outputs to dist/)
+$ npm run generate
+
+# or build for server deployment
 $ npm run build
 $ npm run start
-
-# generate static project
-$ npm run generate
 ```
 
-Remember to lint:
-```
-# lint tool
+### Linting
+
+```bash
 $ npm run lint
 $ npm run lintfix
-
 ```
+
+### License
+
+MIT
