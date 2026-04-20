@@ -8,6 +8,8 @@ This simplistic Nuxt namecard is shown on [the homepage of my personal website](
 # install dependencies
 $ npm install
 
+# Requires Node.js 20+ (use `nvm install 20 && nvm use 20`)
+
 # serve with hot reload at localhost:3000
 $ npm run dev
 

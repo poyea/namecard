@@ -4,6 +4,9 @@
   "description": "Nuxt name card",
   "author": "John Law",
   "private": true,
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "dev": "nuxt",
     "build": "nuxt build",
