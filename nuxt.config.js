@@ -1,6 +1,3 @@
-  generate: {
-    fallback: false
-  },
 const imageUrl = process.env.NUXT_PUBLIC_IMAGE_URL || "";
 
 export default {
