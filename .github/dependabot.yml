@@ -11,3 +11,18 @@ updates:
       - "dependabot"
     allow:
       - dependency-type: "all"
+    ignore:
+      - dependency-name: "@fortawesome/free-brands-svg-icons"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@fortawesome/fontawesome-svg-core"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@fortawesome/free-solid-svg-icons"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@fortawesome/vue-fontawesome"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "eslint"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "eslint-plugin-prettier"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "eslint-config-prettier"
+        update-types: ["version-update:semver-major"]
