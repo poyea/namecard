@@ -1,6 +1,9 @@
 const imageUrl = process.env.NUXT_PUBLIC_IMAGE_URL || "";
 
 export default {
+  generate: {
+    fallback: false
+  },
   ssr: false,
   /*
    ** Headers of the page
