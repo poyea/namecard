@@ -16,8 +16,8 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
     "@fortawesome/free-brands-svg-icons": "^5.15.4",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
-    "@fortawesome/vue-fontawesome": "^0.1.10",
-    "nuxt": "^2.18.1"
+    "@fortawesome/vue-fontawesome": "^3.2.0",
+    "nuxt": "^4.4.2"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^1.1.2",
