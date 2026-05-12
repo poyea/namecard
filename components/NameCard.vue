@@ -252,6 +252,28 @@ export default {}
   background: transparent;
   transition: color 0.18s, border-color 0.18s, background 0.18s, transform 0.18s;
   font-size: clamp(10px, 1.8vmin, 16px);
+  opacity: 0;
+  animation: fade-in-up 0.6s ease-out forwards;
+}
+
+.card-connection .connection-icon:nth-child(1) { animation-delay: 0.1s; }
+.card-connection .connection-icon:nth-child(2) { animation-delay: 0.2s; }
+.card-connection .connection-icon:nth-child(3) { animation-delay: 0.3s; }
+.card-connection .connection-icon:nth-child(4) { animation-delay: 0.4s; }
+.card-connection .connection-icon:nth-child(5) { animation-delay: 0.5s; }
+.card-connection .connection-icon:nth-child(6) { animation-delay: 0.6s; }
+.card-connection .connection-icon:nth-child(7) { animation-delay: 0.7s; }
+.card-connection .connection-icon:nth-child(8) { animation-delay: 0.8s; }
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .connection-icon:hover {
