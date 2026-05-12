@@ -1,10 +1,10 @@
 name: PR Screenshots
 
 on:
-  pull_request_target:
+  pull_request:
     branches:
       - master
-    types: [opened, synchronize, reopened, closed]
+    types: [opened, synchronize, reopened]
 
 concurrency:
   group: pr-screenshots-${{ github.event.pull_request.number }}
@@ -15,7 +15,6 @@ permissions:
 
 jobs:
   capture:
-    if: github.event.action != 'closed'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -23,10 +22,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
-          ref: ${{ github.event.pull_request.head.sha }}
-          persist-credentials: false
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -90,145 +85,3 @@ jobs:
             screenshot-hd.png
             screenshot-iphone.png
           retention-days: 30
-
-  publish-comment:
-    if: github.event.action != 'closed'
-    runs-on: ubuntu-latest
-    needs: capture
-    permissions:
-      contents: write
-      issues: write
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Download screenshots artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: screenshots-pr-${{ github.event.pull_request.number }}
-          path: ./.pr-screenshots
-
-      - name: Publish screenshots to screenshots branch
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          PR_DIR="pr-${{ github.event.pull_request.number }}"
-
-          cp ./.pr-screenshots/screenshot-hd.png /tmp/screenshot-hd.png
-          cp ./.pr-screenshots/screenshot-iphone.png /tmp/screenshot-iphone.png
-
-          if git ls-remote --exit-code origin screenshots; then
-            git fetch origin screenshots
-            git checkout screenshots
-          else
-            git checkout --orphan screenshots
-            git rm -rf . 2>/dev/null || true
-          fi
-
-          mkdir -p "$PR_DIR"
-          cp /tmp/screenshot-hd.png "$PR_DIR/screenshot-hd.png"
-          cp /tmp/screenshot-iphone.png "$PR_DIR/screenshot-iphone.png"
-
-          git add "$PR_DIR/"
-          git diff --cached --quiet || git commit -m "chore: screenshots for PR #${{ github.event.pull_request.number }}"
-          for attempt in 1 2 3; do
-            git push origin screenshots && break
-            if [ "$attempt" -lt 3 ]; then
-              echo "Push failed (attempt $attempt), retrying after rebase..."
-              git fetch origin screenshots
-              git rebase origin/screenshots
-            else
-              echo "Push failed after 3 attempts"
-              exit 1
-            fi
-          done
-
-      - name: Post fresh PR comment
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const owner = context.repo.owner;
-            const repo = context.repo.repo;
-            const pr = context.issue.number;
-            const runUrl = `https://github.com/${owner}/${repo}/actions/runs/${context.runId}`;
-            const baseUrl = `https://raw.githubusercontent.com/${owner}/${repo}/screenshots/pr-${pr}`;
-            const cacheBust = `?run=${context.runId}&attempt=${context.runAttempt}&sha=${context.payload.pull_request.head.sha}`;
-            const marker = '<!-- pr-screenshots-bot -->';
-
-            const body = [
-              marker,
-              '## 📸 PR Screenshots',
-              '',
-              '| Viewport | Preview |',
-              '|---|---|',
-              `| 1920×1080 (HD Desktop) | ![HD Desktop](${baseUrl}/screenshot-hd.png${cacheBust}) |`,
-              `| 390×844 (iPhone) | ![iPhone](${baseUrl}/screenshot-iphone.png${cacheBust}) |`,
-              '',
-              `[⬇️ Download from workflow run](${runUrl})`
-            ].join('\n');
-
-            const comments = await github.paginate(github.rest.issues.listComments, {
-              owner,
-              repo,
-              issue_number: pr
-            });
-
-            const previousComments = comments.filter(c => c.body.includes(marker));
-            for (const comment of previousComments) {
-              await github.rest.issues.deleteComment({
-                owner,
-                repo,
-                comment_id: comment.id
-              });
-            }
-
-            await github.rest.issues.createComment({
-              owner,
-              repo,
-              issue_number: pr,
-              body
-            });
-
-  cleanup:
-    if: github.event.action == 'closed'
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Check if screenshots branch exists
-        id: branch-check
-        run: |
-          if git ls-remote --exit-code origin refs/heads/screenshots; then
-            echo "exists=true" >> $GITHUB_OUTPUT
-          else
-            echo "exists=false" >> $GITHUB_OUTPUT
-            echo "Screenshots branch does not exist, nothing to clean up."
-          fi
-
-      - name: Fetch screenshots branch
-        if: steps.branch-check.outputs.exists == 'true'
-        run: |
-          git fetch origin screenshots:screenshots
-          git checkout screenshots
-
-      - name: Remove PR directory and push
-        if: steps.branch-check.outputs.exists == 'true'
-        run: |
-          PR_DIR="pr-${{ github.event.pull_request.number }}"
-          if [ -d "$PR_DIR" ]; then
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git rm -rf "$PR_DIR"
-            git commit -m "chore: remove screenshots for closed PR #${{ github.event.pull_request.number }}"
-            git push origin screenshots
-          else
-            echo "No screenshots directory found for PR #${{ github.event.pull_request.number }}, nothing to clean up."
-          fi
