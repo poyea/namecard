@@ -1,7 +1,7 @@
 name: PR Screenshots
 
 on:
-  pull_request:
+  pull_request_target:
     branches:
       - master
     types: [opened, synchronize, reopened, closed]
@@ -23,6 +23,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -69,8 +73,8 @@ jobs:
             ./node_modules/.bin/playwright install chromium --with-deps
           fi
 
-      - name: Wait 8 seconds before capturing screenshots
-        run: sleep 8
+      - name: Wait 10 seconds before capturing screenshots
+        run: sleep 10
 
       - name: Take HD screenshot (1920x1080)
         run: ./node_modules/.bin/playwright screenshot --browser chromium --viewport-size "1920,1080" --full-page http://localhost:8080/ screenshot-hd.png
@@ -88,7 +92,7 @@ jobs:
           retention-days: 30
 
   publish-comment:
-    if: github.event.action != 'closed' && github.event.pull_request.head.repo.full_name == github.repository
+    if: github.event.action != 'closed'
     runs-on: ubuntu-latest
     needs: capture
     permissions:
@@ -150,7 +154,7 @@ jobs:
             const pr = context.issue.number;
             const runUrl = `https://github.com/${owner}/${repo}/actions/runs/${context.runId}`;
             const baseUrl = `https://raw.githubusercontent.com/${owner}/${repo}/screenshots/pr-${pr}`;
-            const cacheBust = `?run=${context.runId}`;
+            const cacheBust = `?run=${context.runId}&attempt=${context.runAttempt}&sha=${context.payload.pull_request.head.sha}`;
             const marker = '<!-- pr-screenshots-bot -->';
 
             const body = [
@@ -188,7 +192,7 @@ jobs:
             });
 
   cleanup:
-    if: github.event.action == 'closed' && github.event.pull_request.head.repo.full_name == github.repository
+    if: github.event.action == 'closed'
     runs-on: ubuntu-latest
     permissions:
       contents: write
