@@ -8,8 +8,8 @@
 import vueNamecard from "~/components/NameCard.vue"
 export default {
   components: {
-    vueNamecard
-  }
+    vueNamecard,
+  },
 }
 </script>
 

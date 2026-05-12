@@ -1,0 +1,217 @@
+name: PR Screenshots
+
+on:
+  pull_request:
+    branches:
+      - master
+    types: [opened, synchronize, reopened, closed]
+
+concurrency:
+  group: pr-screenshots-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  screenshots:
+    if: github.event.action != 'closed'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
+
+      - name: Generate static site
+        run: npm run generate
+
+      - name: Serve static site on port 8080
+        run: python3 -m http.server 8080 --directory dist &
+
+      - name: Wait for server to be ready
+        run: |
+          for i in $(seq 1 10); do
+            if curl -sf http://localhost:8080/ > /dev/null 2>&1; then
+              echo "Server is ready"
+              exit 0
+            fi
+            echo "Waiting for server... attempt $i"
+            sleep 2
+          done
+          echo "Server did not become ready in time"
+          exit 1
+
+      - name: Cache Playwright browsers
+        id: playwright-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-chromium-${{ hashFiles('package-lock.json') }}
+
+      - name: Install Playwright Chromium
+        run: |
+          if [ "${{ steps.playwright-cache.outputs.cache-hit }}" = "true" ]; then
+            ./node_modules/.bin/playwright install chromium
+          else
+            ./node_modules/.bin/playwright install chromium --with-deps
+          fi
+
+      - name: Wait 8 seconds before capturing screenshots
+        run: sleep 8
+
+      - name: Take HD screenshot (1920x1080)
+        run: ./node_modules/.bin/playwright screenshot --browser chromium --viewport-size "1920,1080" --full-page http://localhost:8080/ screenshot-hd.png
+
+      - name: Take iPhone screenshot (390x844)
+        run: ./node_modules/.bin/playwright screenshot --browser chromium --viewport-size "390,844" --full-page http://localhost:8080/ screenshot-iphone.png
+
+      - name: Upload screenshots artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots-pr-${{ github.event.pull_request.number }}
+          path: |
+            screenshot-hd.png
+            screenshot-iphone.png
+          retention-days: 30
+
+      - name: Publish screenshots to screenshots branch
+        if: github.event.pull_request.head.repo.full_name == github.repository
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          PR_DIR="pr-${{ github.event.pull_request.number }}"
+
+          cp screenshot-hd.png /tmp/screenshot-hd.png
+          cp screenshot-iphone.png /tmp/screenshot-iphone.png
+
+          if git ls-remote --exit-code origin screenshots; then
+            git fetch origin screenshots
+            git checkout screenshots
+          else
+            git checkout --orphan screenshots
+            git rm -rf . 2>/dev/null || true
+          fi
+
+          mkdir -p "$PR_DIR"
+          cp /tmp/screenshot-hd.png "$PR_DIR/screenshot-hd.png"
+          cp /tmp/screenshot-iphone.png "$PR_DIR/screenshot-iphone.png"
+
+          git add "$PR_DIR/"
+          git diff --cached --quiet || git commit -m "chore: screenshots for PR #${{ github.event.pull_request.number }}"
+          for attempt in 1 2 3; do
+            git push origin screenshots && break
+            if [ "$attempt" -lt 3 ]; then
+              echo "Push failed (attempt $attempt), retrying after rebase..."
+              git fetch origin screenshots
+              git rebase origin/screenshots
+            else
+              echo "Push failed after 3 attempts"
+              exit 1
+            fi
+          done
+
+      - name: Post or update PR comment
+        if: github.event.pull_request.head.repo.full_name == github.repository
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const pr = context.issue.number;
+            const runUrl = `https://github.com/${owner}/${repo}/actions/runs/${context.runId}`;
+            const baseUrl = `https://raw.githubusercontent.com/${owner}/${repo}/screenshots/pr-${pr}`;
+            const cacheBust = `?run=${context.runId}`;
+            const marker = '<!-- pr-screenshots-bot -->';
+
+            const body = [
+              marker,
+              '## 📸 PR Screenshots',
+              '',
+              '| Viewport | Preview |',
+              '|---|---|',
+              `| 1920×1080 (HD Desktop) | ![HD Desktop](${baseUrl}/screenshot-hd.png${cacheBust}) |`,
+              `| 390×844 (iPhone) | ![iPhone](${baseUrl}/screenshot-iphone.png${cacheBust}) |`,
+              '',
+              `[⬇️ Download from workflow run](${runUrl})`
+            ].join('\n');
+
+            const comments = await github.paginate(github.rest.issues.listComments, {
+              owner,
+              repo,
+              issue_number: pr
+            });
+
+            const existing = comments.find(c => c.body.includes(marker));
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner,
+                repo,
+                comment_id: existing.id,
+                body
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number: pr,
+                body
+              });
+            }
+
+            const duplicates = comments.filter(c => c.body.includes(marker) && c.id !== (existing ? existing.id : -1));
+            for (const dup of duplicates) {
+              await github.rest.issues.deleteComment({
+                owner,
+                repo,
+                comment_id: dup.id
+              });
+            }
+
+  cleanup:
+    if: github.event.action == 'closed' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check if screenshots branch exists
+        id: branch-check
+        run: |
+          if git ls-remote --exit-code https://github.com/${{ github.repository }} screenshots; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+            echo "Screenshots branch does not exist, nothing to clean up."
+          fi
+
+      - name: Checkout screenshots branch
+        if: steps.branch-check.outputs.exists == 'true'
+        uses: actions/checkout@v4
+        with:
+          ref: screenshots
+          fetch-depth: 0
+
+      - name: Remove PR directory and push
+        if: steps.branch-check.outputs.exists == 'true'
+        run: |
+          PR_DIR="pr-${{ github.event.pull_request.number }}"
+          if [ -d "$PR_DIR" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git rm -rf "$PR_DIR"
+            git commit -m "chore: remove screenshots for closed PR #${{ github.event.pull_request.number }}"
+            git push origin screenshots
+          else
+            echo "No screenshots directory found for PR #${{ github.event.pull_request.number }}, nothing to clean up."
+          fi
