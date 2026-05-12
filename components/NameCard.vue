@@ -11,144 +11,71 @@
             draggable="false"
           />
           <h1 class="card-name" itemprop="name">John Law</h1>
-          <p class="card-tagline" itemprop="description">
-            Mathematics, Software, Languages.
-          </p>
+          <p class="card-tagline" itemprop="description">Mathematics, Software, Languages.</p>
           <div class="location-roller">
             <div class="location-track">
               <span class="card-location">
-                <font-awesome-icon
-                  class="location-pin"
-                  :icon="['fas', 'map-marker-alt']"
-                />
+                <font-awesome-icon class="location-pin" :icon="['fas', 'map-marker-alt']" />
                 <a
                   href="https://www.openstreetmap.org/?mlat=22.319297&mlon=114.169367#map=17/22.319/114.169"
                   target="_blank"
                 >
-                  (22.319, 114.169) </a
-                >, Hong Kong
+                  (22.319, 114.169)
+                </a>, Hong Kong
               </span>
               <span class="card-location">
-                <font-awesome-icon
-                  class="location-pin"
-                  :icon="['fas', 'map-marker-alt']"
-                />
+                <font-awesome-icon class="location-pin" :icon="['fas', 'map-marker-alt']" />
                 <a
                   href="https://www.openstreetmap.org/?mlat=51.5164&mlon=-0.1304#map=17/51.5164/-0.1304"
                   target="_blank"
                 >
-                  (51.516, -0.130) </a
-                >, London
+                  (51.516, -0.130)
+                </a>, London
               </span>
               <span class="card-location" aria-hidden="true">
-                <font-awesome-icon
-                  class="location-pin"
-                  :icon="['fas', 'map-marker-alt']"
-                />
+                <font-awesome-icon class="location-pin" :icon="['fas', 'map-marker-alt']" />
                 <a
                   href="https://www.openstreetmap.org/?mlat=22.319297&mlon=114.169367#map=17/22.319/114.169"
                   target="_blank"
                   tabindex="-1"
                 >
-                  (22.319, 114.169) </a
-                >, Hong Kong
+                  (22.319, 114.169)
+                </a>, Hong Kong
               </span>
             </div>
           </div>
           <nav class="card-connection" aria-label="Social links">
-            <a
-              class="connection-icon"
-              href="mailto:johnlaw@poyea.me?subject=I want to send you coffee, John"
-              target="_blank"
-              rel="noopener"
-              title="Email"
-              itemprop="email"
-            >
+            <a class="connection-icon" href="mailto:johnlaw@poyea.me?subject=I want to send you coffee, John" target="_blank" rel="noopener" title="Email" itemprop="email">
               <font-awesome-icon :icon="['fas', 'envelope']" />
             </a>
-            <a
-              class="connection-icon"
-              href="https://www.linkedin.com/in/poyea/"
-              target="_blank"
-              rel="noopener"
-              title="LinkedIn"
-              itemprop="sameAs"
-            >
+            <a class="connection-icon" href="https://www.linkedin.com/in/poyea/" target="_blank" rel="noopener" title="LinkedIn" itemprop="sameAs">
               <font-awesome-icon :icon="['fab', 'linkedin']" />
             </a>
-            <a
-              class="connection-icon"
-              href="https://github.com/poyea/"
-              target="_blank"
-              rel="noopener"
-              title="GitHub"
-              itemprop="sameAs"
-            >
+            <a class="connection-icon" href="https://github.com/poyea/" target="_blank" rel="noopener" title="GitHub" itemprop="sameAs">
               <font-awesome-icon :icon="['fab', 'github']" />
             </a>
-            <a
-              class="connection-icon connection-shine"
-              href="https://poyea.me/b/"
-              target="_blank"
-              rel="noopener"
-              title="Blog"
-              itemprop="url"
-            >
+            <a class="connection-icon connection-shine" href="https://poyea.me/b/" target="_blank" rel="noopener" title="Blog" itemprop="url">
               <font-awesome-icon :icon="['fas', 'blog']" />
             </a>
-            <a
-              class="connection-icon"
-              href="https://gitlab.com/poyea/"
-              target="_blank"
-              rel="noopener"
-              title="GitLab"
-              itemprop="sameAs"
-            >
+            <a class="connection-icon" href="https://gitlab.com/poyea/" target="_blank" rel="noopener" title="GitLab" itemprop="sameAs">
               <font-awesome-icon :icon="['fab', 'gitlab']" />
             </a>
             <!-- <a class="connection-icon" href="https://dev.to/poyea/" target="_blank" rel="noopener" title="DEV">
               <font-awesome-icon :icon="['fab', 'dev']" />
             </a> -->
-            <a
-              class="connection-icon"
-              href="https://math.stackexchange.com/users/498637/poyea"
-              target="_blank"
-              rel="noopener"
-              title="Math Stack Exchange"
-              itemprop="sameAs"
-            >
-              <svg
-                class="connection-svg"
-                viewBox="0 0 18 18"
-                fill="currentColor"
-                aria-hidden="true"
-              >
-                <path d="M3 4c0-1.1.9-2 2-2h8a2 2 0 0 1 2 2z" />
-                <path d="M15 11H3c0 1.1.9 2 2 2h5v3l3-3a2 2 0 0 0 2-2" />
-                <path d="M3 5h12v2H3z" />
-                <path d="M3 8h12v2H3z" />
-              </svg>
+            <a class="connection-icon" href="https://math.stackexchange.com/users/498637/poyea" target="_blank" rel="noopener" title="Math Stack Exchange" itemprop="sameAs">
+              <svg class="connection-svg" viewBox="0 0 18 18" fill="currentColor" aria-hidden="true"><path d="M3 4c0-1.1.9-2 2-2h8a2 2 0 0 1 2 2z"/><path d="M15 11H3c0 1.1.9 2 2 2h5v3l3-3a2 2 0 0 0 2-2"/><path d="M3 5h12v2H3z"/><path d="M3 8h12v2H3z"/></svg>
             </a>
-            <a
-              class="connection-icon"
-              href="https://keybase.io/poyea/"
-              target="_blank"
-              rel="noopener"
-              title="Keybase"
-              itemprop="sameAs"
-            >
+            <a class="connection-icon" href="https://keybase.io/poyea/" target="_blank" rel="noopener" title="Keybase" itemprop="sameAs">
               <font-awesome-icon :icon="['fab', 'keybase']" />
             </a>
           </nav>
         </div>
         <blockquote class="card-bio">
-          <p class="quote-text">
-            It is impossible to separate a cube into two cubes, or a fourth
-            power into two fourth powers, or in general, any power higher than
-            the second into two like powers. I have discovered a truly
-            marvellous proof of this, which this margin is too narrow to
-            contain.
-          </p>
+          <p class="quote-text">It is impossible to separate a cube into two cubes, or a fourth power
+          into two fourth powers, or in general, any power higher than the
+          second into two like powers. I have discovered a truly marvellous
+          proof of this, which this margin is too narrow to contain.</p>
           <footer class="quote-author">Pierre de Fermat</footer>
         </blockquote>
       </div>
@@ -158,16 +85,12 @@
 <script>
 import Vue from "vue"
 import { library } from "@fortawesome/fontawesome-svg-core"
-import {
-  faEnvelope,
-  faBlog,
-  faMapMarkerAlt,
-} from "@fortawesome/free-solid-svg-icons"
+import { faEnvelope, faBlog, faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons"
 import {
   faLinkedin,
   faGithub,
   faKeybase,
-  faGitlab,
+  faGitlab
 } from "@fortawesome/free-brands-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
 library.add(
@@ -179,18 +102,18 @@ library.add(
   faBlog,
   faMapMarkerAlt
 )
-Vue.component("FontAwesomeIcon", FontAwesomeIcon)
+Vue.component("font-awesome-icon", FontAwesomeIcon)
 export default {}
 </script>
 
 <style scoped>
 :root {
-  --bg: oklch(99% 0.002 240);
-  --ink: oklch(15% 0.01 240);
-  --ink-mid: oklch(40% 0.01 240);
+  --bg:        oklch(99% 0.002 240);
+  --ink:       oklch(15% 0.01 240);
+  --ink-mid:   oklch(40% 0.01 240);
   --ink-faint: oklch(60% 0.008 240);
-  --rule: oklch(88% 0.004 240);
-  --accent: oklch(50% 0.14 250);
+  --rule:      oklch(88% 0.004 240);
+  --accent:    oklch(50% 0.14 250);
 }
 
 .namecard {
@@ -203,7 +126,7 @@ export default {}
   box-shadow: 0 0px 10px rgba(0, 0, 0, 0.4);
   text-align: center;
   transition: ease-in-out 0.5s;
-  font-family: "DM Sans", sans-serif;
+  font-family: 'DM Sans', sans-serif;
   color: oklch(15% 0.01 240);
   background: oklch(99% 0.002 240);
   -webkit-font-smoothing: antialiased;
@@ -333,30 +256,14 @@ export default {}
   animation: fade-in-up 0.6s ease-out forwards;
 }
 
-.card-connection .connection-icon:nth-child(1) {
-  animation-delay: 0.1s;
-}
-.card-connection .connection-icon:nth-child(2) {
-  animation-delay: 0.2s;
-}
-.card-connection .connection-icon:nth-child(3) {
-  animation-delay: 0.3s;
-}
-.card-connection .connection-icon:nth-child(4) {
-  animation-delay: 0.4s;
-}
-.card-connection .connection-icon:nth-child(5) {
-  animation-delay: 0.5s;
-}
-.card-connection .connection-icon:nth-child(6) {
-  animation-delay: 0.6s;
-}
-.card-connection .connection-icon:nth-child(7) {
-  animation-delay: 0.7s;
-}
-.card-connection .connection-icon:nth-child(8) {
-  animation-delay: 0.8s;
-}
+.card-connection .connection-icon:nth-child(1) { animation-delay: 0.1s; }
+.card-connection .connection-icon:nth-child(2) { animation-delay: 0.2s; }
+.card-connection .connection-icon:nth-child(3) { animation-delay: 0.3s; }
+.card-connection .connection-icon:nth-child(4) { animation-delay: 0.4s; }
+.card-connection .connection-icon:nth-child(5) { animation-delay: 0.5s; }
+.card-connection .connection-icon:nth-child(6) { animation-delay: 0.6s; }
+.card-connection .connection-icon:nth-child(7) { animation-delay: 0.7s; }
+.card-connection .connection-icon:nth-child(8) { animation-delay: 0.8s; }
 
 @keyframes fade-in-up {
   from {
@@ -388,7 +295,7 @@ export default {}
 }
 
 .quote-text {
-  font-family: "Lora", Georgia, serif;
+  font-family: 'Lora', Georgia, serif;
   font-style: italic;
   font-size: clamp(11px, 1.8vmin, 16px);
   line-height: 1.75;
@@ -396,12 +303,8 @@ export default {}
   text-wrap: pretty;
 }
 
-.quote-text::before {
-  content: "\201C";
-}
-.quote-text::after {
-  content: "\201D";
-}
+.quote-text::before { content: "\201C"; }
+.quote-text::after  { content: "\201D"; }
 
 .quote-author {
   margin-top: clamp(6px, 1.5vh, 12px);
@@ -412,9 +315,7 @@ export default {}
   color: oklch(60% 0.008 240);
 }
 
-.quote-author::before {
-  content: "— ";
-}
+.quote-author::before { content: "— "; }
 
 .connection-shine {
   position: relative;
@@ -422,7 +323,7 @@ export default {}
 }
 
 .connection-shine::after {
-  content: "";
+  content: '';
   position: absolute;
   top: -50%;
   left: -50%;
@@ -453,20 +354,16 @@ export default {}
 }
 
 @keyframes roll {
-  0%,
-  35% {
+  0%, 35% {
     transform: translateY(0);
   }
-  40%,
-  45% {
+  40%, 45% {
     transform: translateY(calc(-100% / 3));
   }
-  50%,
-  85% {
+  50%, 85% {
     transform: translateY(calc(-100% / 3));
   }
-  90%,
-  100% {
+  90%, 100% {
     transform: translateY(calc(-200% / 3));
   }
 }
@@ -498,3 +395,4 @@ export default {}
   animation-name: flip;
 }
 </style>
+

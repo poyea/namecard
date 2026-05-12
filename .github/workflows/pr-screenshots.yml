@@ -11,13 +11,14 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: write
-  issues: write
+  contents: read
 
 jobs:
-  screenshots:
+  capture:
     if: github.event.action != 'closed'
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
 
     steps:
       - name: Checkout
@@ -86,16 +87,33 @@ jobs:
             screenshot-iphone.png
           retention-days: 30
 
+  publish-comment:
+    if: github.event.action != 'closed' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    needs: capture
+    permissions:
+      contents: write
+      issues: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download screenshots artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: screenshots-pr-${{ github.event.pull_request.number }}
+          path: ./.pr-screenshots
+
       - name: Publish screenshots to screenshots branch
-        if: github.event.pull_request.head.repo.full_name == github.repository
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           PR_DIR="pr-${{ github.event.pull_request.number }}"
 
-          cp screenshot-hd.png /tmp/screenshot-hd.png
-          cp screenshot-iphone.png /tmp/screenshot-iphone.png
+          cp ./.pr-screenshots/screenshot-hd.png /tmp/screenshot-hd.png
+          cp ./.pr-screenshots/screenshot-iphone.png /tmp/screenshot-iphone.png
 
           if git ls-remote --exit-code origin screenshots; then
             git fetch origin screenshots
@@ -124,7 +142,6 @@ jobs:
           done
 
       - name: Post or update PR comment
-        if: github.event.pull_request.head.repo.full_name == github.repository
         uses: actions/github-script@v7
         with:
           script: |
@@ -183,24 +200,30 @@ jobs:
   cleanup:
     if: github.event.action == 'closed' && github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: Check if screenshots branch exists
         id: branch-check
         run: |
-          if git ls-remote --exit-code https://github.com/${{ github.repository }} screenshots; then
+          if git ls-remote --exit-code origin refs/heads/screenshots; then
             echo "exists=true" >> $GITHUB_OUTPUT
           else
             echo "exists=false" >> $GITHUB_OUTPUT
             echo "Screenshots branch does not exist, nothing to clean up."
           fi
 
-      - name: Checkout screenshots branch
+      - name: Fetch screenshots branch
         if: steps.branch-check.outputs.exists == 'true'
-        uses: actions/checkout@v4
-        with:
-          ref: screenshots
-          fetch-depth: 0
+        run: |
+          git fetch origin screenshots:screenshots
+          git checkout screenshots
 
       - name: Remove PR directory and push
         if: steps.branch-check.outputs.exists == 'true'
