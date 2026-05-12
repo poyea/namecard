@@ -85,3 +85,35 @@ jobs:
             screenshot-hd.png
             screenshot-iphone.png
           retention-days: 30
+
+  comment:
+    runs-on: ubuntu-latest
+    needs: capture
+    permissions:
+      issues: write
+
+    steps:
+      - name: Post fresh PR comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const pr = context.issue.number;
+            const runUrl = `https://github.com/${owner}/${repo}/actions/runs/${context.runId}`;
+            const artifactName = `screenshots-pr-${pr}`;
+
+            const body = [
+              '## PR Screenshots',
+              '',
+              `A new screenshots artifact is available for this PR: \`${artifactName}\`.`,
+              '',
+              `[Open workflow run](${runUrl})`
+            ].join('\n');
+
+            await github.rest.issues.createComment({
+              owner,
+              repo,
+              issue_number: pr,
+              body
+            });
